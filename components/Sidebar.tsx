@@ -98,6 +98,32 @@ export default function Sidebar({ visible, onClose, user }: SidebarProps) {
                   <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
                 </TouchableOpacity>
               ))}
+
+              {(user?.role === 'admin' || user?.role === 'hr') && (
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => {
+                    onClose();
+                    router.push('/requisitions/list' as any);
+                  }}
+                >
+                  <Ionicons name="clipboard-outline" size={24} color="#6B7280" />
+                  <Text style={styles.menuText}>Requisitions</Text>
+                </TouchableOpacity>
+              )}
+
+              {(user?.role === 'admin' || user?.role === 'hr') && (
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => {
+                    onClose();
+                    router.push('/requisitions/hr-list' as any);
+                  }}
+                >
+                  <Ionicons name="cloud-upload-outline" size={24} color="#6B7280" />
+                  <Text style={styles.menuText}>Upload Resumes</Text>
+                </TouchableOpacity>
+              )}
             </ScrollView>
 
             {/* Footer */}
@@ -238,10 +264,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   logoImage: {
-  width: 40,
-  height: 40,
-  borderRadius: 8,
-},
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+  },
 
   brandingText: {
     fontSize: 12,

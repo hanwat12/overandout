@@ -12,12 +12,17 @@ import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
 import type * as candidate from "../candidate.js";
 import type * as createTestUser from "../createTestUser.js";
+import type * as feedback from "../feedback.js";
 import type * as files from "../files.js";
 import type * as fixLogin from "../fixLogin.js";
+import type * as interviews from "../interviews.js";
 import type * as jobs from "../jobs.js";
+import type * as materData from "../materData.js";
 import type * as notifications from "../notifications.js";
 import type * as quickFix from "../quickFix.js";
 import type * as quickSetup from "../quickSetup.js";
+import type * as requisitions from "../requisitions.js";
+import type * as resume from "../resume.js";
 import type * as seedData from "../seedData.js";
 
 import type {
@@ -39,12 +44,17 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   candidate: typeof candidate;
   createTestUser: typeof createTestUser;
+  feedback: typeof feedback;
   files: typeof files;
   fixLogin: typeof fixLogin;
+  interviews: typeof interviews;
   jobs: typeof jobs;
+  materData: typeof materData;
   notifications: typeof notifications;
   quickFix: typeof quickFix;
   quickSetup: typeof quickSetup;
+  requisitions: typeof requisitions;
+  resume: typeof resume;
   seedData: typeof seedData;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

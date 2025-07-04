@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -40,7 +33,7 @@ export default function NotificationsScreen() {
 
   const notifications = useQuery(
     api.notifications.getUserNotifications,
-    user ? { userId: user.userId as Id<"users"> } : "skip"
+    user ? { userId: user.userId as Id<'users'> } : 'skip'
   ) as Notification[] | undefined;
 
   const markAsRead = useMutation(api.notifications.markNotificationAsRead);
@@ -93,7 +86,7 @@ export default function NotificationsScreen() {
   const handleMarkAllAsRead = async () => {
     try {
       if (user) {
-        await markAllAsRead({ userId: user.userId as Id<"users"> });
+        await markAllAsRead({ userId: user.userId as Id<'users'> });
       }
     } catch (error) {
       console.error('Error marking all as read:', error);
@@ -102,19 +95,27 @@ export default function NotificationsScreen() {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'application_status': return 'document-text';
-      case 'interview_scheduled': return 'calendar';
-      case 'job_posted': return 'briefcase';
-      default: return 'notifications';
+      case 'application_status':
+        return 'document-text';
+      case 'interview_scheduled':
+        return 'calendar';
+      case 'job_posted':
+        return 'briefcase';
+      default:
+        return 'notifications';
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'application_status': return '#3B82F6';
-      case 'interview_scheduled': return '#8B5CF6';
-      case 'job_posted': return '#10B981';
-      default: return '#6B7280';
+      case 'application_status':
+        return '#3B82F6';
+      case 'interview_scheduled':
+        return '#8B5CF6';
+      case 'job_posted':
+        return '#10B981';
+      default:
+        return '#6B7280';
     }
   };
 
@@ -135,8 +136,7 @@ export default function NotificationsScreen() {
   if (!user) {
     return (
       <SafeAreaView style={styles.container}>
-    
-    <View style={styles.loadingContainer}>
+        <View style={styles.loadingContainer}>
           <Text>Loading...</Text>
         </View>
       </SafeAreaView>
@@ -148,8 +148,8 @@ export default function NotificationsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header 
-        title="Notifications" 
+      <Header
+        title="Notifications"
         showBack={true}
         rightComponent={
           unreadNotifications.length > 0 ? (
@@ -163,9 +163,7 @@ export default function NotificationsScreen() {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Unread Notifications */}
         {unreadNotifications.length > 0 && (
@@ -178,14 +176,16 @@ export default function NotificationsScreen() {
                 onPress={() => handleNotificationPress(notification)}
               >
                 <View style={styles.notificationContent}>
-                  <View style={[
-                    styles.iconContainer,
-                    { backgroundColor: `${getNotificationColor(notification.type)}20` }
-                  ]}>
-                    <Ionicons 
-                      name={getNotificationIcon(notification.type) as any} 
-                      size={20} 
-                      color={getNotificationColor(notification.type)} 
+                  <View
+                    style={[
+                      styles.iconContainer,
+                      { backgroundColor: `${getNotificationColor(notification.type)}20` },
+                    ]}
+                  >
+                    <Ionicons
+                      name={getNotificationIcon(notification.type) as any}
+                      size={20}
+                      color={getNotificationColor(notification.type)}
                     />
                   </View>
                   <View style={styles.textContent}>
@@ -213,14 +213,16 @@ export default function NotificationsScreen() {
                 onPress={() => handleNotificationPress(notification)}
               >
                 <View style={styles.notificationContent}>
-                  <View style={[
-                    styles.iconContainer,
-                    { backgroundColor: `${getNotificationColor(notification.type)}20` }
-                  ]}>
-                    <Ionicons 
-                      name={getNotificationIcon(notification.type) as any} 
-                      size={20} 
-                      color={getNotificationColor(notification.type)} 
+                  <View
+                    style={[
+                      styles.iconContainer,
+                      { backgroundColor: `${getNotificationColor(notification.type)}20` },
+                    ]}
+                  >
+                    <Ionicons
+                      name={getNotificationIcon(notification.type) as any}
+                      size={20}
+                      color={getNotificationColor(notification.type)}
                     />
                   </View>
                   <View style={styles.textContent}>
@@ -233,8 +235,7 @@ export default function NotificationsScreen() {
                     <Text style={styles.notificationTime}>
                       {formatTimeAgo(notification.createdAt)}
                     </Text>
-        
-          </View>
+                  </View>
                 </View>
               </TouchableOpacity>
             ))}

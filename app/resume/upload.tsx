@@ -32,13 +32,13 @@ export default function UploadResumeScreen() {
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
-  // const candidateProfile = useQuery(
-  //   // api.candidates.getCandidateProfile,
-  //   user ? { userId: user.userId as Id<"users"> } : "skip"
-  // );
+  const candidateProfile = useQuery(
+    api.candidate.getCandidateProfile,
+    user ? { userId: user.userId as Id<'users'> } : 'skip'
+  );
 
   const uploadResume = useMutation(api.files.uploadResume);
-  // const updateCandidateProfile = useMutation(api.candidates.updateCandidateProfile);
+  const updateCandidateProfile = useMutation(api.candidate.updateCandidateProfile);
 
   useEffect(() => {
     loadUserData();
@@ -67,13 +67,17 @@ export default function UploadResumeScreen() {
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+        type: [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ],
         copyToCacheDirectory: true,
       });
 
       if (!result.canceled && result.assets[0]) {
         const file = result.assets[0];
-        
+
         // Check file size (limit to 5MB)
         if (file.size && file.size > 5 * 1024 * 1024) {
           Alert.alert('File Too Large', 'Please select a file smaller than 5MB');
@@ -98,7 +102,7 @@ export default function UploadResumeScreen() {
     try {
       // Read file as base64 string
       let fileData = '';
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'android') {
         const response = await fetch(selectedFile.uri);
         const blob = await response.blob();
         fileData = await new Promise<string>((resolve, reject) => {
@@ -107,14 +111,16 @@ export default function UploadResumeScreen() {
           reader.onerror = reject;
           reader.readAsDataURL(blob);
         });
-    
+
         fileData = fileData.split(',')[1];
       } else {
-        fileData = await FileSystem.readAsStringAsync(selectedFile.uri, { encoding: FileSystem.EncodingType.Base64 });
+        fileData = await FileSystem.readAsStringAsync(selectedFile.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
       }
 
       await uploadResume({
-        userId: user.userId as Id<"users">,
+        userId: user.userId as Id<'users'>,
         fileName: selectedFile.name,
         fileData,
         mimeType: selectedFile.mimeType,
@@ -123,7 +129,7 @@ export default function UploadResumeScreen() {
       Alert.alert('Success', 'Resume uploaded successfully!', [
         { text: 'OK', onPress: () => router.back() },
       ]);
-      
+
       setSelectedFile(null);
     } catch (error) {
       Alert.alert('Error', error instanceof Error ? error.message : 'Failed to upload resume');
@@ -135,29 +141,24 @@ export default function UploadResumeScreen() {
   const removeCurrentResume = async () => {
     if (!user) return;
 
-    Alert.alert(
-      'Remove Resume',
-      'Are you sure you want to remove your current resume?',
-      [
-        { text: 'Cancel', 
-style: 'cancel' },
-        {
-          text: 'Remove',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              // await updateCandidateProfile({
-              //   userId: user.userId as Id<"users">,
-              //   resumeId: undefined,
-              // });
-              Alert.alert('Success', 'Resume removed successfully');
-            } catch (error) {
-              Alert.alert('Error', 'Failed to remove resume');
-            }
-          },
+    Alert.alert('Remove Resume', 'Are you sure you want to remove your current resume?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await updateCandidateProfile({
+              userId: user.userId as Id<'users'>,
+              resumeId: null,
+            });
+            Alert.alert('Success', 'Resume removed successfully');
+          } catch (error) {
+            Alert.alert('Error', 'Failed to remove resume');
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -192,23 +193,22 @@ style: 'cancel' },
         {/* Current Resume Status */}
         <View style={styles.statusCard}>
           <View style={styles.statusHeader}>
-            <Ionicons 
-              // name={candidateProfile?.resumeId ? "checkmark-circle" : "alert-circle"} 
-              size={24} 
-              // color={candidateProfile?.resumeId ? "#10B981" : "#F59E0B"} 
+            <Ionicons
+              name={candidateProfile?.resumeId ? 'checkmark-circle' : 'alert-circle'}
+              size={24}
+              color={candidateProfile?.resumeId ? '#10B981' : '#F59E0B'}
             />
             <Text style={styles.statusTitle}>
-              {/* {candidateProfile?.resumeId ? 'Resume Uploaded' : 'No Resume Uploaded'} */}
+              {candidateProfile?.resumeId ? 'Resume Uploaded' : 'No Resume Uploaded'}
             </Text>
           </View>
           <Text style={styles.statusDescription}>
-            {/* {candidateProfile?.resumeId  */}
-              {/* ? 'You have a resume on file. Upload a new one to replace it.'
-              : 'Upload your resume to improve your job application success rate.'
-            } */}
+            {candidateProfile?.resumeId
+              ? 'You have a resume on file. Upload a new one to replace it.'
+              : 'Upload your resume to improve your job application success rate.'}
           </Text>
-          
-          {/* {candidateProfile?.resumeId && (
+
+          {candidateProfile?.resumeId && (
             <View style={styles.currentResumeActions}>
               <TouchableOpacity style={styles.viewResumeButton}>
                 <Ionicons name="eye" size={16} color="#3B82F6" />
@@ -219,7 +219,7 @@ style: 'cancel' },
                 <Text style={styles.removeResumeText}>Remove</Text>
               </TouchableOpacity>
             </View>
-          )} */}
+          )}
         </View>
 
         {/* Upload Instructions */}
@@ -242,8 +242,7 @@ style: 'cancel' },
               <Ionicons name="checkmark" size={16} color="#10B981" />
               <Text style={styles.instructionText}>Keep it concise and relevant</Text>
             </View>
- 
-         </View>
+          </View>
         </View>
 
         {/* File Selection */}
@@ -251,10 +250,10 @@ style: 'cancel' },
           <View style={styles.selectedFileCard}>
             <View style={styles.fileInfo}>
               <View style={styles.fileIcon}>
-                <Ionicons 
-                  name={getFileIcon(selectedFile.mimeType) as any} 
-                  size={32} 
-                  color="#3B82F6" 
+                <Ionicons
+                  name={getFileIcon(selectedFile.mimeType) as any}
+                  size={32}
+                  color="#3B82F6"
                 />
               </View>
               <View style={styles.fileDetails}>
@@ -264,7 +263,7 @@ style: 'cancel' },
                 </Text>
                 <Text style={styles.fileType}>{selectedFile.mimeType}</Text>
               </View>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.removeFileButton}
                 onPress={() => setSelectedFile(null)}
               >
@@ -278,9 +277,7 @@ style: 'cancel' },
               <Ionicons name="cloud-upload" size={48} color="#9CA3AF" />
             </View>
             <Text style={styles.uploadTitle}>Choose Resume File</Text>
-            <Text style={styles.uploadDescription}>
-              Tap to browse and select your resume file
-            </Text>
+            <Text style={styles.uploadDescription}>Tap to browse and select your resume file</Text>
             <View style={styles.uploadFormats}>
               <Text style={styles.formatText}>PDF, DOC, DOCX</Text>
             </View>

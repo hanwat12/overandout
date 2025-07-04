@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   View,
@@ -26,7 +25,7 @@ export default function SignupScreen() {
     password: '',
     confirmPassword: '',
     phone: '',
-    role: 'candidate' as 'admin' | 'hr' ,
+    role: 'Admin' as 'hr',
   });
   const [loading, setLoading] = useState(false);
 
@@ -72,7 +71,7 @@ export default function SignupScreen() {
   };
 
   const updateFormData = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -84,12 +83,12 @@ export default function SignupScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.content}>
             <View style={styles.logoContainer}>
-                     <Image
-                       source={require('../../assets/Slrd.png')}
-                       style={styles.logoImage}
-                       resizeMode="contain"
-                     />
-                   </View>
+              <Image
+                source={require('../../assets/Slrd.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
+            </View>
             <Text style={styles.title}>Create Account</Text>
             <Text style={styles.subtitle}>Join our hiring platform</Text>
           </View>
@@ -218,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-   content: {
+  content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -329,8 +328,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 32,
   },
-  
-loginText: {
+
+  loginText: {
     fontSize: 16,
     color: '#6B7280',
   },

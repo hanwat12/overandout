@@ -1,17 +1,18 @@
 {
   "expo": {
     "name": "Slrd",
-    "slug": "Slrd",
+    "slug": "slrd",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/Slrd.png",
-    "scheme": "myapp",
+    "scheme": "slrd",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
+      "package": "com.slrd.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -36,7 +37,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "displayName": "Slrd "
+    }
   }
 }

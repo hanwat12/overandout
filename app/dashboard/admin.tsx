@@ -63,8 +63,10 @@ export default function AdminDashboard() {
   const formatSalary = (min: number, max: number, currency: string = 'INR') => {
     const symbol = currency === 'INR' ? '₹' : '$';
     if (currency === 'INR') {
-      const minLakhs = min >= 100000 ? `${(min / 100000).toFixed(1)}L` : `${(min / 1000).toFixed(0)}K`;
-      const maxLakhs = max >= 100000 ? `${(max / 100000).toFixed(1)}L` : `${(max / 1000).toFixed(0)}K`;
+      const minLakhs =
+        min >= 100000 ? `${(min / 100000).toFixed(1)}L` : `${(min / 1000).toFixed(0)}K`;
+      const maxLakhs =
+        max >= 100000 ? `${(max / 100000).toFixed(1)}L` : `${(max / 1000).toFixed(0)}K`;
       return `${symbol}${minLakhs} - ${symbol}${maxLakhs}`;
     }
     return `₹{symbol}₹{min.toLocaleString()} - ₹{symbol}₹{max.toLocaleString()}`;
@@ -72,32 +74,45 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'applied': return '#3B82F6';
-      case 'screening': return '#F59E0B';
-      case 'interview_scheduled': return '#8B5CF6';
-      case 'interviewed': return '#6366F1';
-      case 'selected': return '#10B981';
-      case 'rejected': return '#EF4444';
-      default: return '#6B7280';
+      case 'applied':
+        return '#3B82F6';
+      case 'screening':
+        return '#F59E0B';
+      case 'interview_scheduled':
+        return '#8B5CF6';
+      case 'interviewed':
+        return '#6366F1';
+      case 'selected':
+        return '#10B981';
+      case 'rejected':
+        return '#EF4444';
+      default:
+        return '#6B7280';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'applied': return 'Applied';
-      case 'screening': return 'Screening';
-      case 'interview_scheduled': return 'Interview Scheduled';
-      case 'interviewed': return 'Interviewed';
-      case 'selected': return 'Selected';
-      case 'rejected': return 'Rejected';
-      default: return status;
+      case 'applied':
+        return 'Applied';
+      case 'screening':
+        return 'Screening';
+      case 'interview_scheduled':
+        return 'Interview Scheduled';
+      case 'interviewed':
+        return 'Interviewed';
+      case 'selected':
+        return 'Selected';
+      case 'rejected':
+        return 'Rejected';
+      default:
+        return status;
     }
   };
 
   if (!user) {
     return (
       <SafeAreaView style={styles.container}>
-
         <View style={styles.loadingContainer}>
           <Text>Loading...</Text>
         </View>
@@ -107,12 +122,12 @@ export default function AdminDashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header 
+      <Header
         title="Admin Dashboard"
         showMenu={true}
         onMenuPress={() => setSidebarVisible(true)}
         rightComponent={
-          <NotificationBell 
+          <NotificationBell
             userId={user.userId}
             onPress={() => router.push('/notifications' as any)}
           />
@@ -121,15 +136,15 @@ export default function AdminDashboard() {
 
       <ScrollView
         style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
           <Text style={styles.greeting}>Welcome back,</Text>
-          <Text style={styles.userName}>{user.firstName} {user.lastName}</Text>
-          
+          <Text style={styles.userName}>
+            {user.firstName} {user.lastName}
+          </Text>
+
           <Text style={styles.userRole}>{user.role.toUpperCase()} DASHBOARD</Text>
         </View>
 
@@ -158,7 +173,6 @@ export default function AdminDashboard() {
             <Text style={styles.statNumber}>{stats?.totalApplications || 0}</Text>
             <Text style={styles.statLabel}>Applications</Text>
           </View>
-
 
           <View style={styles.statCard}>
             <View style={styles.statIconContainer}>
@@ -227,6 +241,30 @@ export default function AdminDashboard() {
               <Ionicons name="document-text-outline" size={32} color="#8B5CF6" />
               <Text style={styles.actionText}>Applications</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => router.push('/requisitions/create' as any)}
+            >
+              <Ionicons name="clipboard-outline" size={32} color="#EF4444" />
+              <Text style={styles.actionText}>New Requisition</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => router.push('/requisitions/list' as any)}
+            >
+              <Ionicons name="list-outline" size={32} color="#06B6D4" />
+              <Text style={styles.actionText}>Manage Requisitions</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => router.push('/resume/upload' as any)}
+            >
+              <Ionicons name="cloud-upload-outline" size={32} color="#84CC16" />
+              <Text style={styles.actionText}>Upload Resumes</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -238,7 +276,7 @@ export default function AdminDashboard() {
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
-          
+
           {jobs?.slice(0, 3).map((job) => (
             <TouchableOpacity
               key={job._id}
@@ -247,20 +285,20 @@ export default function AdminDashboard() {
             >
               <View style={styles.jobHeader}>
                 <Text style={styles.jobTitle}>{job.title}</Text>
-                <View style={[
-                  styles.statusBadge,
-                  { backgroundColor: job.status === 'active' ? '#10B981' : '#6B7280' }
-                ]}>
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: job.status === 'active' ? '#10B981' : '#6B7280' },
+                  ]}
+                >
                   <Text style={styles.statusText}>{job.status}</Text>
                 </View>
               </View>
               <Text style={styles.jobDepartment}>{job.department}</Text>
               <Text style={styles.jobLocation}>{job.location}</Text>
               <Text style={styles.jobSalary}>
-
                 {formatSalary(job.salaryMin, job.salaryMax, job.currency)}
               </Text>
-              
             </TouchableOpacity>
           ))}
         </View>
@@ -273,7 +311,7 @@ export default function AdminDashboard() {
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
-          
+
           {recentApplications?.slice(0, 3).map((application) => (
             <TouchableOpacity
               key={application._id}
@@ -284,7 +322,10 @@ export default function AdminDashboard() {
                 <View style={styles.candidateInfo}>
                   <View style={styles.candidateAvatar}>
                     <Text style={styles.candidateInitials}>
-                      {application.candidateName?.split(' ').map((n: string) => n[0]).join('') || 'NA'}
+                      {application.candidateName
+                        ?.split(' ')
+                        .map((n: string) => n[0])
+                        .join('') || 'NA'}
                     </Text>
                   </View>
                   <View style={styles.candidateDetails}>
@@ -293,11 +334,15 @@ export default function AdminDashboard() {
                     <Text style={styles.applicationJobTitle}>{application.jobTitle}</Text>
                   </View>
                 </View>
-                <View style={[
-                  styles.applicationStatusBadge,
-                  { backgroundColor: getStatusColor(application.status) }
-                ]}>
-                  <Text style={styles.applicationStatusText}>{getStatusText(application.status)}</Text>
+                <View
+                  style={[
+                    styles.applicationStatusBadge,
+                    { backgroundColor: getStatusColor(application.status) },
+                  ]}
+                >
+                  <Text style={styles.applicationStatusText}>
+                    {getStatusText(application.status)}
+                  </Text>
                 </View>
               </View>
               <Text style={styles.applicationDate}>
@@ -315,7 +360,7 @@ export default function AdminDashboard() {
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>
-          
+
           {/* {candidates?.slice(0, 3).map((candidate) => (
             <View key={candidate._id} style={styles.candidateCard}>
               <View style={styles.candidateInfo}>
@@ -342,11 +387,7 @@ export default function AdminDashboard() {
         </View>
       </ScrollView>
 
-      <Sidebar 
-        visible={sidebarVisible}
-        onClose={() => setSidebarVisible(false)}
-        user={user}
-      />
+      <Sidebar visible={sidebarVisible} onClose={() => setSidebarVisible(false)} user={user} />
     </SafeAreaView>
   );
 }
@@ -362,8 +403,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scrollView: {
-    
-flex: 1,
+    flex: 1,
   },
   welcomeSection: {
     padding: 24,
